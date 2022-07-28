@@ -1,0 +1,78 @@
+---
+version: '3.7'
+services:
+  zookeeper-1:
+    image: confluentinc/cp-zookeeper:6.1.1
+    hostname: zookeeper-1
+    container_name: zookeeper-1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 22181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: "zookeeper-1:22888:23888;zookeeper-2:32888:33888;zookeeper-3:42888:43888"
+  zookeeper-2:
+    image: confluentinc/cp-zookeeper:6.1.1
+    hostname: zookeeper-2
+    container_name: zookeeper-2
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 32181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SERVER_ID: 2
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: "zookeeper-1:22888:23888;zookeeper-2:32888:33888;zookeeper-3:42888:43888"
+  zookeeper-3:
+    image: confluentinc/cp-zookeeper:6.1.1
+    hostname: zookeeper-3
+    container_name: zookeeper-3
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 42181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SERVER_ID: 3
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: "zookeeper-1:22888:23888;zookeeper-2:32888:33888;zookeeper-3:42888:43888"
+  apache-ignite-inmemory-cache-node-1:
+    image: applem1support/ignite:2.12.0
+    restart: on-failure
+    entrypoint:
+      - bash
+      - -c
+      - |
+        cd /opt/ignite/apache-ignite
+        cp -R libs/optional/ignite-zookeeper libs/
+        ./run.sh
+    ports:
+      - "0.0.0.0:10800:10800"
+    volumes:
+      - ./conf/default-ignite-config-node-1.xml:/opt/ignite/apache-ignite/config/default-config.xml:ro
+  apache-ignite-inmemory-cache-node-2:
+    image: applem1support/ignite:2.12.0
+    restart: on-failure
+    entrypoint:
+      - bash
+      - -c
+      - |
+        cd /opt/ignite/apache-ignite
+        cp -R libs/optional/ignite-zookeeper libs/
+        ./run.sh
+    ports:
+      - "0.0.0.0:10810:10810"
+    volumes:
+      - ./conf/default-ignite-config-node-2.xml:/opt/ignite/apache-ignite/config/default-config.xml:ro
+  apache-ignite-inmemory-cache-node-3:
+    image: applem1support/ignite:2.12.0
+    restart: on-failure
+    entrypoint:
+      - bash
+      - -c
+      - |
+        cd /opt/ignite/apache-ignite
+        cp -R libs/optional/ignite-zookeeper libs/
+        ./run.sh
+    ports:
+      - "0.0.0.0:10830:10830"
+    volumes:
+      - ./conf/default-ignite-config-node-3.xml:/opt/ignite/apache-ignite/config/default-config.xml:ro

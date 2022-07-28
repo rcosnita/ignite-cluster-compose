@@ -1,0 +1,23 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.apache.ignite.configuration.IgniteConfiguration" id="ignite.cfg">
+        <property name="connectorConfiguration">                                         
+            <bean class="org.apache.ignite.configuration.ConnectorConfiguration">
+              <property name="port" value="10810"/>
+            </bean>
+        </property>
+
+        <property name="discoverySpi">
+          <bean class="org.apache.ignite.spi.discovery.zk.ZookeeperDiscoverySpi">
+            <property name="zkConnectionString" value="zookeeper-1:22181,zookeeper-2:32181,zookeeper-3:42181" />
+            <property name="sessionTimeout" value="30000"/>
+            <property name="zkRootPath" value="/apacheIgnite"/>
+            <property name="joinTimeout" value="10000"/>
+          </bean>
+        </property>
+    </bean>
+</beans>
